@@ -1,0 +1,9 @@
+See https://www.robotstxt.org/robotstxt.html for syntax and directives
+User-agent: *
+Allow: /
+
+Disallow all routes that require authentication
+Disallow: /dashboard/
+Disallow: /project/
+Disallow: /admin/
+Disallow: /api/
