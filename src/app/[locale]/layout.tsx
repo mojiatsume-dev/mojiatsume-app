@@ -3,11 +3,11 @@ import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import { Header } from "@/components/layout/header";
 import SessionProviderWrapper from "@/components/layout/session-provider-wrapper";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// Centralized metadata for the entire application.
-// We will make this dynamic with translations later.
 export const metadata: Metadata = {
   title: {
     default: "Mojiatsume",
@@ -17,22 +17,26 @@ export const metadata: Metadata = {
     "Learn Japanese by collecting words from your favorite video games.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
 }) {
+  // We use getLocale() and getMessages() from next-intl to correctly
+  // get the language and translation files for the provider.
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html lang={locale} className="dark" style={{ colorScheme: "dark" }}>
       <body className={inter.className}>
         <SessionProviderWrapper>
-          <div className="relative flex min-h-screen flex-col bg-background">
-            <Header />
-            <main className="flex-1">{children}</main>
-            {/* A Footer component can be added here later */}
-          </div>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <div className="relative flex min-h-screen flex-col bg-background">
+              <Header />
+              <main className="flex-1">{children}</main>
+            </div>
+          </NextIntlClientProvider>
         </SessionProviderWrapper>
       </body>
     </html>

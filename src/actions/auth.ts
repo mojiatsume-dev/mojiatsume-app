@@ -28,7 +28,8 @@ export async function registerUser(data: FormData) {
       },
     });
     return { success: "User registered successfully. Please sign in." };
-  } catch (error) {
+  } catch (_error) {
+    // Rename variable to satisfy the linter
     return { error: "Something went wrong." };
   }
 }
